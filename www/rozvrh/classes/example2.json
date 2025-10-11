@@ -1,0 +1,168 @@
+[
+    [
+        {
+            "nth": "0",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "1",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "2",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "202"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "404"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "405"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "406"
+        }
+    ],
+    [
+        {
+            "nth": "0",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "2",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "202"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "404"
+        },
+        {
+            "nth": "3",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "212"
+        },
+        {
+            "nth": "4",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "402"
+        }
+    ],
+    [
+        {
+            "nth": "1",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "2",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "202"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "404"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "405"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "406"
+        }
+    ],
+    [
+        {
+            "nth": "0",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "2",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "202"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "404"
+        },
+        {
+            "nth": "3",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "212"
+        },
+        {
+            "nth": "4",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "402"
+        }
+    ],
+    [
+        {
+            "nth": "1",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "2",
+            "subject": "Český jazyk",
+            "teacher": "Marie Novotná",
+            "room": "202"
+        },
+        {
+            "nth": "4",
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodová",
+            "room": "404"
+        },
+        {
+            "nth": "6",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        },
+        {
+            "nth": "7",
+            "subject": "Matematika",
+            "teacher": "Jan Novák",
+            "room": "101"
+        }
+    ]
+]

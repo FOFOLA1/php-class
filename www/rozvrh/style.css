@@ -1,0 +1,99 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+select {
+    padding: 5px;
+    font-size: 16px;
+}
+
+img {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 200px;
+    height: auto;
+}
+
+.lesson {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 2px 0;
+    background-color: #f9f9f9;
+    flex: 1;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lesson p {
+    margin: 3px 0;
+    font-size: 14px;
+    text-align: center;
+
+}
+
+.lesson h2 {
+    font-size: 16px;
+    margin: 0;
+    text-align: center;
+}
+
+.time-slot {
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    background-color: #006468ff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-label {
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    background-color: #006468ff;
+    color: white;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lessons-cell {
+    background-color: #e0f7fa;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#timetable {
+    display: grid;
+    grid-template-columns: 40px repeat(11, minmax(120px, 350px));
+    grid-template-rows: 40px;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+#timetable>p {
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    background-color: #006468ff;
+    color: white;
+}
+
+#timetable>div {
+    background-color: #e0f7fa;
+    padding: 2px;
+    min-height: 80px;
+}
