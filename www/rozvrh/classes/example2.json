@@ -1,167 +1,167 @@
 [
     [
         {
-            "nth": "0",
+            "nth": 0,
             "subject": "Matematika",
-            "teacher": "Jan Novák",
+            "teacher": "Jan Nov\u00e1k",
             "room": "101"
         },
         {
-            "nth": "1",
+            "nth": 1,
             "subject": "Matematika",
-            "teacher": "Jan Novák",
+            "teacher": "Jan Nov\u00e1k",
             "room": "101"
         },
         {
-            "nth": "2",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
+            "nth": 2,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
             "room": "202"
         },
         {
-            "nth": "4",
+            "nth": 6,
+            "subject": "Matematika",
+            "teacher": "Jan Nov\u00e1k",
+            "room": "101"
+        },
+        {
+            "nth": 4,
             "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
+            "teacher": "Eva Svobodov\u00e1",
             "room": "404"
-        },
-        {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "405"
-        },
-        {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "406"
         }
     ],
     [
         {
-            "nth": "0",
+            "nth": 0,
             "subject": "Matematika",
-            "teacher": "Jan Novák",
+            "teacher": "Jan Nov\u00e1k",
             "room": "101"
         },
         {
-            "nth": "2",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
+            "nth": 2,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
             "room": "202"
         },
         {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "404"
-        },
-        {
-            "nth": "3",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
+            "nth": 3,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
             "room": "212"
         },
         {
-            "nth": "4",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
+            "nth": 4,
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodov\u00e1",
+            "room": "404"
+        }
+    ],
+    [
+        {
+            "nth": 1,
+            "subject": "Matematika",
+            "teacher": "Jan Nov\u00e1k",
+            "room": "101"
+        },
+        {
+            "nth": 2,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
+            "room": "202"
+        },
+        {
+            "nth": 4,
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodov\u00e1",
+            "room": "404"
+        },
+        {
+            "nth": 4,
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodov\u00e1",
+            "room": "406"
+        },
+        {
+            "nth": 5,
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodov\u00e1",
+            "room": "405"
+        },
+        {
+            "nth": 5,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
+            "room": "203"
+        },
+        {
+            "nth": 5,
+            "subject": "Matematika",
+            "teacher": "Jan Nov\u00e1k",
+            "room": "100"
+        }
+    ],
+    [
+        {
+            "nth": 0,
+            "subject": "Matematika",
+            "teacher": "Jan Nov\u00e1k",
+            "room": "101"
+        },
+        {
+            "nth": 2,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
+            "room": "202"
+        },
+        {
+            "nth": 4,
+            "subject": "Fyzika",
+            "teacher": "Eva Svobodov\u00e1",
+            "room": "404"
+        },
+        {
+            "nth": 3,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
+            "room": "212"
+        },
+        {
+            "nth": 4,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
             "room": "402"
         }
     ],
     [
         {
-            "nth": "1",
+            "nth": 1,
             "subject": "Matematika",
-            "teacher": "Jan Novák",
+            "teacher": "Jan Nov\u00e1k",
             "room": "101"
         },
         {
-            "nth": "2",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
+            "nth": 2,
+            "subject": "\u010cesk\u00fd jazyk",
+            "teacher": "Marie Novotn\u00e1",
             "room": "202"
         },
         {
-            "nth": "4",
+            "nth": 4,
             "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
+            "teacher": "Eva Svobodov\u00e1",
             "room": "404"
         },
         {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "405"
-        },
-        {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "406"
-        }
-    ],
-    [
-        {
-            "nth": "0",
+            "nth": 6,
             "subject": "Matematika",
-            "teacher": "Jan Novák",
+            "teacher": "Jan Nov\u00e1k",
             "room": "101"
         },
         {
-            "nth": "2",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
-            "room": "202"
-        },
-        {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "404"
-        },
-        {
-            "nth": "3",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
-            "room": "212"
-        },
-        {
-            "nth": "4",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
-            "room": "402"
-        }
-    ],
-    [
-        {
-            "nth": "1",
+            "nth": 7,
             "subject": "Matematika",
-            "teacher": "Jan Novák",
-            "room": "101"
-        },
-        {
-            "nth": "2",
-            "subject": "Český jazyk",
-            "teacher": "Marie Novotná",
-            "room": "202"
-        },
-        {
-            "nth": "4",
-            "subject": "Fyzika",
-            "teacher": "Eva Svobodová",
-            "room": "404"
-        },
-        {
-            "nth": "6",
-            "subject": "Matematika",
-            "teacher": "Jan Novák",
-            "room": "101"
-        },
-        {
-            "nth": "7",
-            "subject": "Matematika",
-            "teacher": "Jan Novák",
+            "teacher": "Jan Nov\u00e1k",
             "room": "101"
         }
     ]

@@ -11,46 +11,37 @@
 
 <body>
     <img src="./logo.png" alt="Trakaláři logo">
-    <form method="GET" action="" id="classForm">
-        <label for="class-select">Choose a class:</label>
-        <select id="class-select" name="selected_class" onchange="handleClassSelection()">
-            <option value="">Select a class</option>
-            <?php
-            $classesDir = './classes';
-            if (is_dir($classesDir)) {
-                $files = scandir($classesDir);
-                foreach ($files as $file) {
-                    if (pathinfo($file, PATHINFO_EXTENSION) === 'json') {
-                        // Remove .json extension
-                        $className = pathinfo($file, PATHINFO_FILENAME);
-                        $displayName = str_replace('_', ' ', $className);
-                        $displayName = ucwords($displayName);
+    <header>
 
-                        $selected = (isset($_GET['selected_class']) && $_GET['selected_class'] === $className) ? 'selected' : '';
-                        echo "<option value=\"{$className}\" {$selected}>{$displayName}</option>";
+        <form method="GET" action="" id="classForm">
+            <select id="class-select" name="class" onchange="document.getElementById('classForm').submit()">
+                <option value="">Select a class</option>
+                <?php
+                $classesDir = './classes';
+                if (is_dir($classesDir)) {
+                    $files = scandir($classesDir);
+                    foreach ($files as $file) {
+                        if (pathinfo($file, PATHINFO_EXTENSION) === 'json') {
+                            // Remove .json extension
+                            $className = pathinfo($file, PATHINFO_FILENAME);
+                            $displayName = str_replace('_', ' ', $className);
+                            $displayName = ucwords($displayName);
+
+                            $selected = (isset($_GET['class']) && $_GET['class'] === $className) ? 'selected' : '';
+                            echo "<option value=\"{$className}\" {$selected}>{$displayName}</option>";
+                        }
                     }
                 }
-            }
-            ?>
-        </select>
-    </form>
-
-    <script>
-        function handleClassSelection() {
-            const select = document.getElementById('class-select');
-            const form = document.getElementById('classForm');
-
-            // submit only when selected non-empty
-            if (select.value !== '') {
-                form.submit();
-            }
-        }
-    </script>
+                ?>
+            </select>
+        </form>
+        <button onclick="location.href='./admin/'">Admin</button>
+    </header>
 
     <?php
     // Display selected class info
-    if (isset($_GET['selected_class']) && !empty($_GET['selected_class'])) {
-        $selectedClass = $_GET['selected_class'];
+    if (isset($_GET['class']) && !empty($_GET['class'])) {
+        $selectedClass = $_GET['class'];
         $filePath = "./classes/{$selectedClass}.json";
 
         if (file_exists($filePath)) {
