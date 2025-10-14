@@ -20,5 +20,6 @@ class Lesson
                     <p>" . htmlspecialchars($this->teacher) . "</p>
                     <p>Room: " . htmlspecialchars($this->room) . "</p>
                 </div>";
+                // Zde AI vypomohla se syntaxí
     }
 }
