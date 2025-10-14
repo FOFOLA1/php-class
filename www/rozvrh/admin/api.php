@@ -108,6 +108,7 @@ function delete_lesson() {
     $lessonsInSlot = [];
     $otherLessons = [];
 
+    // <AI>
     // Split all lessons
     foreach ($classData[$day] as $lesson) {
         if (intval($lesson['nth']) === $slot) {
@@ -124,6 +125,7 @@ function delete_lesson() {
 
         // Merge back all lessons
         $classData[$day] = array_merge($otherLessons, $lessonsInSlot);
+    // </AI>
         if (writeClassData($className, $classData)) {
             echo json_encode(['success' => true, 'code' => 200]);
         } else {
@@ -200,141 +202,3 @@ function delete_class() {
         echo json_encode(['success' => false, 'code' => 500, 'error' => 'Failed to delete class']);
     }
 }
-
-/*if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $action = $_GET['action'] ?? '';
-
-    if ($action === 'get_lessons') {
-        $className = $_GET['class'] ?? '';
-        $day = intval($_GET['day'] ?? -1);
-        $slot = intval($_GET['slot'] ?? -1);
-
-        if (empty($className) || $day < 0 || $slot < 0) {
-            echo json_encode(['success' => false, 'error' => 'Invalid parameters']);
-            exit;
-        }
-
-        $classData = readClassData($className);
-        if ($classData === null) {
-            echo json_encode(['success' => false, 'error' => 'Class not found']);
-            exit;
-        }
-
-        // Get lessons for the specific day and slot
-        $lessons = [];
-        if (isset($classData[$day]) && is_array($classData[$day])) {
-            foreach ($classData[$day] as $lesson) {
-                if (intval($lesson['nth']) === $slot) {
-                    $lessons[] = [
-                        'subject' => $lesson['subject'] ?? 'Unknown',
-                        'teacher' => $lesson['teacher'] ?? 'Unknown',
-                        'room' => $lesson['room'] ?? 'Unknown'
-                    ];
-                }
-            }
-        }
-
-        echo json_encode(['success' => true, 'lessons' => $lessons]);
-        exit;
-    }
-}
-
-// Handle POST requests - add or delete lessons
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-
-    if ($action === 'add_lesson') {
-        $className = $_POST['class'] ?? '';
-        $day = intval($_POST['day'] ?? -1);
-        $slot = intval($_POST['slot'] ?? -1);
-        $subject = $_POST['subject'] ?? '';
-        $teacher = $_POST['teacher'] ?? '';
-        $room = $_POST['room'] ?? '';
-
-        if (empty($className) || $day < 0 || $slot < 0 || empty($subject) || empty($teacher) || empty($room)) {
-            echo json_encode(['success' => false, 'error' => 'Invalid parameters']);
-            exit;
-        }
-
-        $classData = readClassData($className);
-        if ($classData === null) {
-            echo json_encode(['success' => false, 'error' => 'Class not found']);
-            exit;
-        }
-
-        // Initialize day array if it doesn't exist
-        if (!isset($classData[$day])) {
-            $classData[$day] = [];
-        }
-
-        // Add the new lesson
-        $classData[$day][] = [
-            'nth' => $slot,
-            'subject' => $subject,
-            'teacher' => $teacher,
-            'room' => $room
-        ];
-
-        if (writeClassData($className, $classData)) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to save data']);
-        }
-        exit;
-    }
-
-    if ($action === 'delete_lesson') {
-        $className = $_POST['class'] ?? '';
-        $day = intval($_POST['day'] ?? -1);
-        $slot = intval($_POST['slot'] ?? -1);
-        $index = intval($_POST['index'] ?? -1);
-
-        if (empty($className) || $day < 0 || $slot < 0 || $index < 0) {
-            echo json_encode(['success' => false, 'error' => 'Invalid parameters']);
-            exit;
-        }
-
-        $classData = readClassData($className);
-        if ($classData === null) {
-            echo json_encode(['success' => false, 'error' => 'Class not found']);
-            exit;
-        }
-
-        if (!isset($classData[$day]) || !is_array($classData[$day])) {
-            echo json_encode(['success' => false, 'error' => 'No lessons found for this day']);
-            exit;
-        }
-
-        // Find and delete the lesson at the specified index for this slot
-        $lessonsInSlot = [];
-        $allLessons = [];
-        
-        foreach ($classData[$day] as $lesson) {
-            if (intval($lesson['nth']) === $slot) {
-                $lessonsInSlot[] = $lesson;
-            } else {
-                $allLessons[] = $lesson;
-            }
-        }
-
-        // Remove the lesson at the specified index
-        if (isset($lessonsInSlot[$index])) {
-            unset($lessonsInSlot[$index]);
-            $lessonsInSlot = array_values($lessonsInSlot); // Re-index array
-            
-            // Merge back with other lessons
-            $classData[$day] = array_merge($allLessons, $lessonsInSlot);
-            
-            if (writeClassData($className, $classData)) {
-                echo json_encode(['success' => true]);
-            } else {
-                echo json_encode(['success' => false, 'error' => 'Failed to save data']);
-            }
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Lesson not found']);
-        }
-        exit;
-    }
-}
-
-echo json_encode(['success' => false, 'error' => 'Invalid action']);*/

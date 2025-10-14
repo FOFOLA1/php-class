@@ -22,10 +22,12 @@
                     $files = scandir($classesDir);
                     foreach ($files as $file) {
                         if (pathinfo($file, PATHINFO_EXTENSION) === 'json') {
+                            // <AI>
                             // Remove .json extension
                             $className = pathinfo($file, PATHINFO_FILENAME);
                             $displayName = str_replace('_', ' ', $className);
                             $displayName = ucwords($displayName);
+                            // </AI>
 
                             $selected = (isset($_GET['class']) && $_GET['class'] === $className) ? 'selected' : '';
                             echo "<option value=\"{$className}\" {$selected}>{$displayName}</option>";
