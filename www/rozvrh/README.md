@@ -1,5 +1,7 @@
 # Trakaláři - Školní rozvrh hodin
 
+> Demo dostupné na https://phpdev.rehacek.tech/rozvrh, Github repozitář lze nalézt na https://github.com/FOFOLA1/php-class/tree/master/www/rozvrh.
+
 ## Obsah
 
 1. [Popis projektu](#popis-projektu)
@@ -417,8 +419,8 @@ php -S localhost:8080
 
 Projekt demonstruje:
 
--   ✅ **Praktické použití OOP v PHP** (třída Lesson s type hints)
--   ✅ **Správu dat pomocí polí** a důležité array funkce
--   ✅ **Čistou architekturu** s oddělením concerns (API, view, model)
--   ✅ **Moderní PHP praktiky** (strict types, null coalescing, type declarations)
--   ✅ **RESTful API design**
+- ✅ **Praktické použití OOP v PHP** (třída Lesson s type hints)
+- ✅ **Správu dat pomocí polí** a důležité array funkce
+- ✅ **Čistou architekturu** s oddělením concerns (API, view, model)
+- ✅ **Moderní PHP praktiky** (strict types, null coalescing, type declarations)
+- ✅ **RESTful API design**
