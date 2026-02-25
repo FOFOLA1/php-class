@@ -1,40 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
+    <title>Přidat produkt</title>
     <link rel="stylesheet" href="output.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen py-8">
-    <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-6 text-gray-800">Add Product</h1>
-        <?php if (isset($error)) echo "<p class='text-red-600 bg-red-50 border border-red-200 rounded p-3 mb-4 text-sm'>$error</p>"; ?>
-        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+<body class="page-padded">
+    <div class="form-container">
+        <h1 class="page-title">Přidat produkt</h1>
+        <?php if (isset($error) && $error): ?>
+            <p class="alert-error"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+        <form method="POST" enctype="multipart/form-data" class="form-group">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Name:</label>
+                <label class="form-label">Jméno produktu:</label>
                 <input type="text" name="name" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="form-input">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
+                <label class="form-label">Detail:</label>
                 <textarea name="description" rows="4"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    class="form-input"></textarea>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Price:</label>
+                <label class="form-label">Cena:</label>
                 <input type="number" step="0.01" name="price" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="form-input">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Category:</label>
+                <label class="form-label">Kategorie:</label>
                 <select name="category_id"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                    class="form-select">
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['display_name'] ?? $cat['name']) ?></option>
                     <?php endforeach; ?>
@@ -42,20 +44,76 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Images (Select multiple):</label>
-                <input type="file" name="images[]" multiple
-                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                <label class="form-label">Obrázky:</label>
+                <label for="imageInput"
+                    class="file-upload-label">
+                    Vyber obrázky
+                </label>
+                <input type="file" name="images[]" multiple id="imageInput" class="hidden">
+                <p id="fileSizeInfo" class="file-size-info hidden"></p>
+                <p id="fileSizeError" class="file-size-error hidden"></p>
             </div>
 
-            <div class="flex items-center gap-4 pt-2">
-                <button type="submit"
-                    class="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-medium">
-                    Add Product
+            <div class="form-actions">
+                <button type="submit" id="submitBtn"
+                    class="btn btn-primary">
+                    Přidat produkt
                 </button>
-                <a href="index.php" class="text-gray-600 hover:text-gray-800 hover:underline">Back</a>
+                <a href="index.php" class="link-muted">Zpět</a>
             </div>
         </form>
     </div>
+
+    <script>
+        const maxUploadSize = <?= isset($maxTotalImageSize) ? (int) $maxTotalImageSize : 20 * 1024 * 1024 ?>;
+        const maxImageCount = <?= isset($maxImageCount) ? (int) $maxImageCount : 5 ?>;
+        const imageInput = document.getElementById('imageInput');
+        const fileSizeInfo = document.getElementById('fileSizeInfo');
+        const fileSizeError = document.getElementById('fileSizeError');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function formatSize(bytes) {
+            if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            if (bytes >= 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return bytes + ' B';
+        }
+
+        function toggleSubmit(hasError) {
+            submitBtn.disabled = hasError;
+            submitBtn.classList.toggle('opacity-50', hasError);
+            submitBtn.classList.toggle('cursor-not-allowed', hasError);
+        }
+
+        imageInput.addEventListener('change', function() {
+            let totalSize = 0;
+            for (const file of this.files) {
+                totalSize += file.size;
+            }
+
+            if (this.files.length === 0) {
+                fileSizeInfo.classList.add('hidden');
+                fileSizeError.classList.add('hidden');
+                toggleSubmit(false);
+                return;
+            }
+
+            fileSizeInfo.textContent = 'Celková velikost: ' + formatSize(totalSize) + ' (' + this.files.length + ' soubor' + (this.files.length > 1 ? 'ů' : '') + ')';
+            fileSizeInfo.classList.remove('hidden');
+
+            if (this.files.length > maxImageCount) {
+                fileSizeError.textContent = 'Můžeš nahrát maximálně ' + maxImageCount + ' obrázků.';
+                fileSizeError.classList.remove('hidden');
+                toggleSubmit(true);
+            } else if (totalSize > maxUploadSize) {
+                fileSizeError.textContent = 'Celková velikost překračuje limit ' + formatSize(maxUploadSize) + '. Vyber prosím menší soubory.';
+                fileSizeError.classList.remove('hidden');
+                toggleSubmit(true);
+            } else {
+                fileSizeError.classList.add('hidden');
+                toggleSubmit(false);
+            }
+        });
+    </script>
 </body>
 
 </html>
