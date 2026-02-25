@@ -4,7 +4,6 @@ require_once 'db.php';
 require_once 'controllers/ProductController.php';
 require_once 'controllers/AuthController.php';
 
-// Simple router
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 
 $productController = new ProductController($pdo);
@@ -39,6 +38,6 @@ switch ($action) {
         $authController->logout();
         break;
     default:
-        echo "Page not found";
+        echo "Stránka nebyla nalezena";
         break;
 }

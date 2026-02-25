@@ -2,7 +2,7 @@
 require_once 'db.php';
 require_once 'models/User.php';
 
-$sql = file_get_contents('schema.sql');
+$sql = file_get_contents(__DIR__ . '/schema.sql');
 if ($sql === false) {
     die("Error reading schema.sql");
 }
@@ -11,7 +11,6 @@ try {
     $pdo->exec($sql);
     echo "Database initialized successfully.\n";
 
-    // Add admin user if not exists
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = 'admin'");
     $stmt->execute();
     if ($stmt->fetchColumn() == 0) {

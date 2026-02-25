@@ -12,37 +12,38 @@ class ProductController
 
     public function index()
     {
-        $categoryId = isset($_GET['category']) ? $_GET['category'] : null;
+        $categoryId = isset($_GET['category']) ? (int) $_GET['category'] : null;
+        if ($categoryId !== null && $categoryId <= 0) {
+            $categoryId = null;
+        }
         $sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
 
         $products = $this->productModel->getAll($categoryId, $sort);
 
         $currentCategory = null;
+        $parentCategory = null;
         if ($categoryId) {
             $currentCategory = $this->productModel->getCategory($categoryId);
+            if ($currentCategory && !empty($currentCategory['parent_id'])) {
+                $parentCategory = $this->productModel->getCategory($currentCategory['parent_id']);
+            }
         }
 
-        // Get subcategories for navigation
         $categories = $this->productModel->getCategories($categoryId);
-
-        // Also needed: if inside a subcategory, we might want to know the parent to go back
-        // But $currentCategory has parent_id, so we can use that in the view.
 
         require 'views/product_list.php';
     }
 
     public function detail()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
-        if (!$id) {
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        if (!$id || $id <= 0) {
             die("Product ID required");
         }
         $product = $this->productModel->getById($id);
         if (!$product) {
-            die("Product not found");
+            die("Produkt nenalezen");
         }
-        // Assuming fetchAll returns array of rows, fetch returns row
-        // getById returns single row
         $images = $this->productModel->getImages($id);
 
         require 'views/product_detail.php';
@@ -51,11 +52,11 @@ class ProductController
     public function delete()
     {
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            die("Access denied");
+            die("Přístup odepřen");
         }
 
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
-        if ($id) {
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        if ($id && $id > 0) {
             $this->productModel->delete($id);
         }
 
@@ -66,24 +67,25 @@ class ProductController
     public function addCategory()
     {
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            die("Access denied");
+            die("Přístup odepřen");
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
+            $name = trim($_POST['name']);
             $parentId = !empty($_POST['parent_id']) ? $_POST['parent_id'] : null;
 
+            if ($name === '') {
+                header("Location: index.php");
+                exit;
+            }
+
             if ($this->productModel->addCategory($name, $parentId)) {
-                header("Location: index.php"); // Or back to category list
+                header("Location: index.php");
                 exit;
             } else {
-                echo "Failed to add category";
+                echo "Nepodařilo se vytvořit kategorii.";
             }
         }
-
-        // Reuse product list view or make a new one? 
-        // Actually, maybe we accept the POST from the list view directly or have a small form.
-        // Let's redirect back to index.
         header("Location: index.php");
         exit;
     }
@@ -91,11 +93,11 @@ class ProductController
     public function deleteCategory()
     {
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            die("Access denied");
+            die("Přístup odepřen");
         }
 
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
-        if ($id) {
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        if ($id && $id > 0) {
             $this->productModel->deleteCategory($id);
         }
 
@@ -106,14 +108,18 @@ class ProductController
     public function add()
     {
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            die("Access denied");
+            die("Přístup odepřen");
         }
 
+        $phpUploadLimit = (int) ini_get('max_file_uploads');
+        $maxImageCount = $phpUploadLimit > 0 ? min(5, $phpUploadLimit) : 5;
+        $maxTotalImageSize = 20 * 1024 * 1024;
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
-            $description = $_POST['description'];
+            $name = trim($_POST['name']);
+            $description = trim($_POST['description']);
             $price = $_POST['price'];
-            $categoryId = $_POST['category_id'];
+            $categoryId = (int) $_POST['category_id'];
 
             $data = [
                 'name' => $name,
@@ -121,32 +127,31 @@ class ProductController
                 'price' => $price,
                 'category_id' => $categoryId
             ];
-
-            // Check file count before creating product
-            if (isset($_FILES['images']) && count($_FILES['images']['name']) > 5) {
-                $error = "Maximum allowed images is 5.";
+            if (isset($_FILES['images']) && count($_FILES['images']['name']) > $maxImageCount) {
+                $error = "Maximální povolený počet obrázků je {$maxImageCount}.";
+            } elseif (isset($_FILES['images']) && array_sum($_FILES['images']['size']) > $maxTotalImageSize) {
+                $error = "Maximální celková velikost obrázků je 20 MB.";
             } else {
                 $productId = $this->productModel->save($data);
 
                 if ($productId) {
-                    // Handle images
                     if (isset($_FILES['images'])) {
                         $files = $_FILES['images'];
                         $count = count($files['name']);
+                        $uploadDir = __DIR__ . '/../uploads/';
+                        $webPath = 'uploads/';
+                        if (!file_exists($uploadDir)) {
+                            mkdir($uploadDir, 0777, true);
+                        }
                         for ($i = 0; $i < $count; $i++) {
                             if ($files['error'][$i] === UPLOAD_ERR_OK) {
                                 $tmpName = $files['tmp_name'][$i];
                                 $name = basename($files['name'][$i]);
-                                $uploadDir = 'uploads/';
-                                if (!file_exists($uploadDir)) {
-                                    mkdir($uploadDir, 0777, true);
-                                }
-                                // Basic sanitization
                                 $name = preg_replace("/[^a-zA-Z0-9\._-]/", "", $name);
-                                $targetFile = $uploadDir . time() . "_" . $name;
+                                $fileName = time() . "_" . $name;
 
-                                if (move_uploaded_file($tmpName, $targetFile)) {
-                                    $this->productModel->addImage($productId, $targetFile);
+                                if (move_uploaded_file($tmpName, $uploadDir . $fileName)) {
+                                    $this->productModel->addImage($productId, $webPath . $fileName);
                                 }
                             }
                         }
@@ -154,7 +159,7 @@ class ProductController
                     header("Location: index.php");
                     exit;
                 } else {
-                    $error = "Failed to add product";
+                    $error = "Nepodařilo se přidat produkt.";
                 }
             }
         }

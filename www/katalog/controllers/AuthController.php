@@ -24,7 +24,7 @@ class AuthController
                 header("Location: index.php");
                 exit;
             } else {
-                $error = "Invalid credentials";
+                $error = "Neplatné přihlašovací údaje.";
             }
         }
         require 'views/login.php';
@@ -37,16 +37,14 @@ class AuthController
             $username = $_POST['username'];
             $password = $_POST['password'];
 
-            // Basic validation
             if (empty($username) || empty($password)) {
-                $error = "Username and password are required";
+                $error = "Uživatelské jméno a heslo jsou povinné.";
             } else {
                 if ($this->userModel->register($username, $password)) {
-                    // Start session and login automatically or just redirect
                     header("Location: index.php?action=login");
                     exit;
                 } else {
-                    $error = "Registration failed (username might be taken)";
+                    $error = "Registrace se nezdařila (uživatelské jméno může být již zabrané).";
                 }
             }
         }

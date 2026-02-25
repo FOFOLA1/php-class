@@ -10,7 +10,7 @@ class User
 
     public function login($username, $password)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt = $this->pdo->prepare("SELECT id, username, password, role FROM users WHERE username = :username");
         $stmt->execute([':username' => $username]);
         $user = $stmt->fetch();
 
@@ -22,19 +22,12 @@ class User
 
     public static function hashPassword($password)
     {
-        // Use Argon2id if available (slower, memory-hard), otherwise use Bcrypt with higher cost
-        // password_hash() automatically generates a secure random salt for each password
         $options = [
-            'memory_cost' => 65536, // 64MB
-            'time_cost' => 4,
-            'threads' => 2,
+            'memory_cost' => 65536,
+            'time_cost' => 12,
+            'threads' => 1,
         ];
-        $algo = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
-
-        // If Argon2 isn't available and we fall back to Bcrypt, increase the cost
-        if ($algo === PASSWORD_DEFAULT) {
-            $options = ['cost' => 12];
-        }
+        $algo =  PASSWORD_ARGON2ID;
 
         return password_hash($password, $algo, $options);
     }
@@ -47,7 +40,6 @@ class User
             $stmt = $this->pdo->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
             return $stmt->execute([':username' => $username, ':password' => $hash]);
         } catch (PDOException $e) {
-            // Handle unique constraint violation or multiple registration
             return false;
         }
     }

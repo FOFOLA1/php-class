@@ -29,15 +29,21 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT IGNORE INTO categories (name, parent_id) VALUES 
-('Electronics', NULL), 
-('Clothing', NULL), 
-('Books', NULL),
-('Laptops', 1),
-('Components', 1),
-('Men Clothing', 2);
+('Elektronika', NULL), 
+('Oblečení', NULL), 
+('Knihy', NULL),
+('Notebooky', 1),
+('Součásti', 1),
+('Mužské oblečení', 2);
 
 INSERT IGNORE INTO products (name, description, price, category_id) VALUES 
-('Laptop', 'High performance laptop', 999.99, 4), -- Laptops
-('T-Shirt', 'Cotton t-shirt', 19.99, 6), -- Men Clothing
-('PHP Guide', 'Learn PHP in 24 hours', 29.99, 3), -- Books
-('CPU', 'Fast Processor', 299.99, 5); -- Components
+('Notebook', 'Výkonný moderní herní notebook', 24999, 4), -- Notebooks
+('Tričko', 'Bavlněné tričko', 499, 6), -- Men Clothing
+('PHP Kniha', 'Nauč se PHP z pohodlí domova!', 751, 3), -- Books
+('CPU', 'Moderní procesor', 7500, 5); -- Components
+
+
+INSERT IGNORE INTO product_images (product_id, image_url) VALUES
+(1, 'uploads/laptop.webp'),
+(3, 'uploads/php_guide.webp'),
+(4, 'uploads/cpu.webp');
