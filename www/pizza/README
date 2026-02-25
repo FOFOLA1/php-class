@@ -1,0 +1,176 @@
+# Objednávka pizzy
+
+Aplikace simulující objednávkový systém pro pizzu s vlastní konfigurací. Celý kód je rozdělen do tří hlavních částí: definice dat (`PizzaData.php`), výběr produktu (`index.php`) a správa košíku s dokončením objednávky (`cart.php`). Níže jsou popsány klíčové mechanismy použité v této aplikaci.
+
+## Předávání hodnot pomocí HTTP requestů
+
+HTTP (Hypertext Transfer Protocol) je základní protokol pro komunikaci na webu, který je **bezstavový**. To znamená, že server si mezi jednotlivými požadavky nepamatuje, kdo jste. Aby aplikace fungovala, musíme data předávat ručně. V naší aplikaci využíváme dvě hlavní metody pro předávání dat mezi klientem (prohlížečem) a serverem: **GET** a **POST**.
+
+### GET metoda
+
+- Data odesílána jako součást URL adresy (tzv. query string)
+- Parametry viditelné v adresním řádku.
+- Vhodná pro získávání dat, filtrování nebo navigaci
+- Nehodí se pro citlivá data (hesla) nebo pro akce, které mění stav na serveru (mazání, ukládání)
+
+### POST metoda
+
+- Data odesílána v těle HTTP požadavku
+- Parametry nejsou viditelné v URL
+- Vhodná pro odesílání formulářů a dalších citlivých údajů, které mění stav na serveru (vytváření, aktualizace dat)
+
+### Implementace v projektu
+
+V souboru `index.php` používáme formulář s metodou **POST** pro odeslání konfigurace pizzy:
+
+```html
+<form action="cart.php" method="post"></form>
+```
+
+Důvodem je, že přidání pizzy do košíku je akce, která mění stav aplikace (obsah košíku).
+
+Naopak v souboru `cart.php` používáme metodu **GET** pro akce, jako je odstranění položky z košíku:
+
+```html
+<a href="cart.php?action=remove&id=0">Odstranit</a>
+```
+
+Zde je ID položky předáváno v URL. To umožňuje snadné vytvoření odkazu pro konkrétní akci. Ačkoliv zde mažeme data, zde se často používá GET pro jednoduchost implementace bez nutnosti JavaScriptu/formuláře pro každé tlačítko. Opakované volání tohoto odkazu by mělo mít stejný efekt (idempotentní).
+
+
+## Superglobální pole v PHP
+
+PHP poskytuje speciální předdefinovaná pole, která jsou dostupná v celém skriptu (proto "superglobální"). Obsahují informace z HTTP požadavku, serveru nebo relace.
+
+### $_POST
+
+Obsahuje data odeslaná metodou HTTP POST. V souboru `cart.php` takto získáváme data z formulářů:
+
+```php
+// Získání velikosti pizzy, pokud není vybrána, použije se defaultní
+$size = $_POST['size'] ?? '30cm';
+```
+
+Toto pole používáme pro zpracování přidání do košíku (`action === 'add'`) i pro finální objednávku (`action === 'checkout'`).
+
+### $_GET
+
+Obsahuje data z URL parametrů. V aplikaci ho využíváme pro detekci úspěšného odeslání objednávky nebo pro mazání položek:
+
+```php
+// Zobrazení zprávy po úspěšné objednávce (index.php?success=1)
+if (isset($_GET['success'])) { ... }
+
+// Odstranění položky (cart.php?action=remove&id=...)
+if ($_GET['action'] === 'remove' && isset($_GET['id'])) { ... }
+```
+
+### $_SESSION
+
+Protože je HTTP bezstavový, používáme `$_SESSION` k uchování stavu uživatele (obsahu košíku) napříč různými stránkami. Data jsou uložena na serveru a spárována s uživatelem pomocí unikátního ID (uloženého v cookie).
+
+1. Na začátku každého souboru, který pracuje se session, voláme:
+
+```php
+session_start();
+```
+
+2. V `cart.php` inicializujeme košík pokud ještě neexistuje:
+
+```php
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+```
+
+3. Následně do něj přidáváme položky:
+
+```php
+$_SESSION['cart'][] = $item;
+```
+
+### $_SERVER
+
+Toto pole obsahuje informace o hlavičkách, cestách a umístění skriptů.
+
+  * **Implementace:** Používáme `$_SERVER['REQUEST_METHOD'] === 'POST'` k rozlišení, zda se uživatel dostal na danou stránku tím, že jen načetl stránku, nebo odeslal formulář.
+
+## Regulární výrazy (Regex)
+
+Regulární výrazy jsou nástrojem pro vyhledávání a kontrolu textových řetězců podle určitého vzoru (patternu).
+
+### Teorie
+
+Regex definuje pravidla, jak má text vypadat. Skládá se ze speciálních znaků:
+
+-   `^` - začátek řetězce
+-   `$` - konec řetězce
+-   `[a-z]` - rozsah znaků
+-   `+` - jeden nebo více výskytů
+-   `\d` - číslice
+
+### Implementace a validace
+
+V souboru `cart.php` používáme funkci `preg_match()` pro validaci údajů v objednávkovém formuláři. Toto řešení zajišťuje, že data mají očekávaný formát předtím, než je zpracujeme.
+
+**Příklad validace PSČ:**
+
+```php
+preg_match('/^\d{3}\s?\d{2}$/', $formData['addressPostalCode'])
+```
+
+-   `^` a `$` zajistí, že kontrolujeme celý řetězec.
+-   `\d{3}` očekává přesně 3 číslice.
+-   `\s?` povoluje nepovinnou mezeru.
+-   `\d{2}` očekává přesně 2 číslice.
+    Tento regex tedy propustí formáty "12345" i "123 45".
+
+**Příklad validace jména:**
+
+```php
+preg_match('/^[a-zěščřžýáíéóňťA-ZĚŠČŘŽÝÁÍÉÓŇŤ]+(( )+[a-zěščřžýáíéóňťA-ZĚŠČŘŽÝÁÍÉÓŇŤ]+)*$/', $formData['name'])
+```
+
+Tento složitější výraz povoluje česká písmena a zajišťuje, že jméno nezačíná ani nekončí mezerou, ale může obsahovat více slov oddělených mezerami.
+
+-----
+
+## Popis a odůvodnění řešení
+
+Aplikace je rozdělena do logických celků pro přehlednost a udržitelnost.
+
+### Datový model (`PizzaData.php`)
+
+Správa vykreslovaných dat na jednom místě za pomocí třídy `PizzaComponent` a pole objektů (`$sizes`, `$bases`, `$toppings`).
+
+  * **Odůvodnění:** Toto umožňuje jednoduchý způsob správy a údržby dat. Pokud chceme změnit cenu šunky, změníme ji na jednom místě v `PizzaData.php` a změna se projeví v ceníku, ve formuláři i při výpočtu v košíku. Použití tříd (OOP) zajišťuje, že každá komponenta má garantovanou strukturu (název a cenu).
+
+### Zpracování košíku (`cart.php`)
+
+Logika je rozdělena na zpracování akcí (Controller) a vykreslení (View) v jednom souboru.
+
+  * **Session Storage:** Košík je uložen v session jako pole polí. Každá položka obsahuje pouze identifikátory (klíče) vybraných komponent, nikoliv jejich ceny.
+  * **Odůvodnění:** Cenu počítáme dynamicky pomocí funkce `calculatePizzaPrice` při každém zobrazení. To je bezpečnostní prvek - pokud by uživatel v session podvrhl cenu, systém ji ignoruje a spočítá ji znovu podle aktuálního ceníku v `PizzaData.php`.
+
+### Bezpečnost
+
+  * **XSS (Cross-Site Scripting):** Při výpisu dat z formuláře zpět do HTML (např. když uživatel udělá chybu a my chceme zachovat vyplněné pole) používáme `htmlspecialchars($formData['name'])`. To zabraňuje vložení škodlivého HTML/JS kódu.
+  * **Validace na serveru:** Přestože `index.php` obsahuje JavaScript pro okamžitý výpočet ceny (UX), `cart.php` provádí veškeré kontroly znovu na serveru. JavaScript lze v prohlížeči vypnout nebo obejít, serverová validace je jediná důvěryhodná.
+
+### Client-Side Interaktivita (`index.php`)
+
+Formulář využívá JavaScript k sčítání cen v reálném čase pomocí `data-price` atributů.
+
+  * **Odůvodnění:** Snižuje odezvu od změny položky k zobrazení celkové ceny pomalu na nulu, protože nemusí čekat na odpověď serveru. Tím také snižuje zátěž serveru, protože nemusíme opakovaně odesílat data na server pro zjištění ceny.
+
+### Proč Session?
+
+Alternativou by bylo ukládání do Cookies (kde by data byla u klienta a mohla by být manipulována) nebo do databáze. Session nabízí kompromis bezpečnosti a jednoduchosti pro dočasné uložení dat uživatele.
+
+### Proč vlastní validace pomocí Regex?
+
+Ačkoliv HTML5 nabízí validaci (např. `type="email"` nebo `required`), tato validace probíhá pouze v prohlížeči a lze ji obejít. Validace na straně serveru (v PHP) je nezbytná pro bezpečnost. Použití regulárních výrazů nám dává plnou kontrolu nad tím, co považujeme za validní údaj (např. specifický formát české adresy), což by standardní funkce PHP nemusely pokrýt tak přesně.
+
+## Závěr
+
+Výsledná aplikace demonstruje robustní zpracování formulářů v PHP. Kombinuje klientský JavaScript pro pohodlí uživatele se striktní serverovou validací pomocí regulárních výrazů a bezpečnou prací s daty pomocí superglobálních polí a sessions.
