@@ -37,7 +37,7 @@ INSERT IGNORE INTO categories (name, parent_id) VALUES
 ('Men Clothing', 2);
 
 INSERT IGNORE INTO products (name, description, price, category_id) VALUES 
-('Laptop', 'High performance laptop', 999.99, 4), -- Laptops
-('T-Shirt', 'Cotton t-shirt', 19.99, 6), -- Men Clothing
-('PHP Guide', 'Learn PHP in 24 hours', 29.99, 3), -- Books
-('CPU', 'Fast Processor', 299.99, 5); -- Components
+('Laptop', 'High performance laptop', 24999, 4), -- Laptops
+('T-Shirt', 'Cotton t-shirt', 499, 6), -- Men Clothing
+('PHP Guide', 'Learn PHP in 24 hours', 751, 3), -- Books
+('CPU', 'Fast Processor', 7500, 5); -- Components

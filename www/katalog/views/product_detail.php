@@ -67,7 +67,7 @@
                 <h1 class="text-3xl font-bold text-gray-800 mb-1 hidden md:block"><?= htmlspecialchars($product['name']) ?></h1>
                 <div class="text-gray-500 text-sm mb-4 hidden md:block">Category: <?= htmlspecialchars($product['category_name']) ?></div>
 
-                <div class="text-green-600 text-3xl font-bold mb-4">$<?= htmlspecialchars($product['price']) ?></div>
+                <div class="text-green-600 text-3xl font-bold mb-4"><?= number_format($product['price'], 2, ',', ' ') ?> Kč</div>
 
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <div class="mb-4">

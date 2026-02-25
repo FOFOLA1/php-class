@@ -112,7 +112,7 @@
                         <p class="text-gray-500 text-xs mb-2"><?= htmlspecialchars($product['category_name']) ?></p>
                         <p class="text-gray-600 text-sm mb-3"><?= htmlspecialchars(substr($product['description'], 0, 100)) . (strlen($product['description']) > 100 ? '...' : '') ?></p>
                         <div class="flex justify-between items-center">
-                            <span class="text-green-600 font-bold text-lg">$<?= number_format($product['price'], 2) ?></span>
+                            <span class="text-green-600 font-bold text-lg"><?= number_format($product['price'], 2, ',', ' ') ?> Kč</span>
                             <a href="index.php?action=detail&id=<?= $product['id'] ?>"
                                 class="text-blue-600 text-sm hover:underline">View Details</a>
                         </div>
